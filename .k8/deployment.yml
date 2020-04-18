@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: china-flu-discord-bot-deployment
+  labels:
+    app: china-flu-discord-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: china-flu-discord-bot
+  template:
+    metadata:
+      labels:
+        app: china-flu-discord-bot
+    spec:
+      containers:
+        - name: china-flu-discord-bot
+          image: <IMAGE>
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: prod-discord-db-secret
+                  key: hostname
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: prod-discord-db-secret
+                  key: port
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: prod-discord-db-secret
+                  key: username
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: prod-discord-db-secret
+                  key: password
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: prod-discord-db-secret
+                  key: database
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: prod-discord-discord-secret
+                  key: token
+            - name: PGSSLMODE
+              value: "require"
+            - name: DISCORD_PREFIX
+              value: "!"
